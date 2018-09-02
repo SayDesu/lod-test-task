@@ -1,0 +1,10 @@
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\bin\Debug\lod-test-task.exe.config
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\bin\Debug\lod-test-task.exe
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\bin\Debug\lod-test-task.pdb
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\bin\Debug\Newtonsoft.Json.xml
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\obj\Debug\lod-test-task.csprojAssemblyReference.cache
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\obj\Debug\lod-test-task.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\obj\Debug\lod-test-task.csproj.CopyComplete
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\obj\Debug\lod-test-task.exe
+C:\Users\User\source\repos\LoD\lod-test-task\lod-test-task\obj\Debug\lod-test-task.pdb
