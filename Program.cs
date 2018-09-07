@@ -18,18 +18,10 @@ namespace lod_test_task
                 Console.WriteLine("You can't cook with no ingredients :C");
                 return;
             }
-            string request = "http://www.recipepuppy.com/api/?i=";
-            string last = args.Last();
-            foreach (string ingredient in args)
-            {
-                request += ingredient;
-                if (!ingredient.Equals(last))
-                {
-                    request += ",";
-                }
-            }
+            var request = args.Distinct().Aggregate("http://www.recipepuppy.com/api/?i=", (req, s) => s!= args.Distinct().Last() ? req + s + "," : req + s);
+            Console.WriteLine(request);
             List<Result> reslist = new List<Result>();
-            int min_ingredients_count = int.MaxValue;
+            int minIngredientsCount = int.MaxValue;
             for (int page = 1; page<11; ++page)
             {
                 try
@@ -41,9 +33,9 @@ namespace lod_test_task
                     foreach (Result res in rootobj.results)
                     {
                         var splited = res.ingredients.Split(',');
-                        if (splited.Length < min_ingredients_count)
+                        if (splited.Length < minIngredientsCount)
                         {
-                            min_ingredients_count = splited.Length;
+                            minIngredientsCount = splited.Length;
                         }
                         reslist.Add(res);
                     }
@@ -56,7 +48,7 @@ namespace lod_test_task
             Console.WriteLine("Here are the easiest recepies for your ingredient set:\n");
             foreach(Result res in reslist)
             {
-                if (res.ingredients.Split(',').Length == min_ingredients_count)
+                if (res.ingredients.Split(',').Length == minIngredientsCount)
                 {
                     Console.WriteLine(res.title + "\n" + res.ingredients + "\n" + res.href + "\n");
                 }
