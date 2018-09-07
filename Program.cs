@@ -21,7 +21,6 @@ namespace lod_test_task
             var request = args.Distinct().Aggregate("http://www.recipepuppy.com/api/?i=", (req, s) => s!= args.Distinct().Last() ? req + s + "," : req + s);
             Console.WriteLine(request);
 
-            IEnumerable<Result> test = new List<Result>();
             var reslist = new List<Result>();
             var minIngredientCount = Int32.MaxValue;
             for (int page = 1; page<11; ++page)
@@ -29,12 +28,14 @@ namespace lod_test_task
                 try
                 {
                     var resp = GetData(request + "&p=" + page.ToString());
-                    if (resp.Status == TaskStatus.Faulted) break;
                     resp.Wait();
-                    var currentIngredientCount = resp.Result.results.Min(y => y.ingredients.Split(',').Length);
-                    if( minIngredientCount > currentIngredientCount)
+                    var currentMinIngredientCount = resp.Result.results.Min(y => y.ingredients.Split(',').Length);
+                    if( minIngredientCount > currentMinIngredientCount)
                     {
-                        minIngredientCount = currentIngredientCount;
+                        minIngredientCount = currentMinIngredientCount;
+                    }else if (minIngredientCount < currentMinIngredientCount)
+                    {
+                        continue;
                     }
                     reslist.AddRange(resp.Result.results.Where(x => x.ingredients.Split(',').Length == minIngredientCount));
                 } 
