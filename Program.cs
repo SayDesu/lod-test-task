@@ -20,8 +20,8 @@ namespace lod_test_task
             }
             var request = args.Distinct().Aggregate("http://www.recipepuppy.com/api/?i=", (req, s) => s!= args.Distinct().Last() ? req + s + "," : req + s);
             Console.WriteLine(request);
-            List<Result> reslist = new List<Result>();
-            int minIngredientsCount = int.MaxValue;
+
+            IEnumerable<Result> reslist = new List<Result>();
             for (int page = 1; page<11; ++page)
             {
                 try
@@ -29,16 +29,8 @@ namespace lod_test_task
                     var resp = GetData(request + "&p=" + page.ToString());
                     if (resp.Status == TaskStatus.Faulted) break;
                     resp.Wait();
-                    var rootobj = resp.Result;
-                    foreach (Result res in rootobj.results)
-                    {
-                        var splited = res.ingredients.Split(',');
-                        if (splited.Length < minIngredientsCount)
-                        {
-                            minIngredientsCount = splited.Length;
-                        }
-                        reslist.Add(res);
-                    }
+                    reslist = resp.Result.results.Where(x=> x.ingredients.Split(',').Length == resp.Result.results.Min(y => y.ingredients.Split(',').Length));
+
                 } catch (Exception e)
                 {
                     break;
@@ -46,16 +38,13 @@ namespace lod_test_task
             }
 
             Console.WriteLine("Here are the easiest recepies for your ingredient set:\n");
-            foreach(Result res in reslist)
+            foreach(var res in reslist)
             {
-                if (res.ingredients.Split(',').Length == minIngredientsCount)
-                {
-                    Console.WriteLine(res.title + "\n" + res.ingredients + "\n" + res.href + "\n");
-                }
+                Console.WriteLine(res.title + "\n" + res.ingredients + "\n" + res.href + "\n");
             }
         }
 
-        async static Task<Rootobject> GetData(string url)
+        static async Task<Rootobject> GetData(string url)
         {
             HttpResponseMessage response = await client.GetAsync(url);
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError) throw new Exception("Error 500");
